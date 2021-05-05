@@ -1,0 +1,46 @@
+{
+  "companyLogo": "https://main.threekit.dev/js/e2cbb422605a23262d39c75455cc2dc2.svg",
+  "companyPhone": "+1 (215) 497-0224",
+  "companyEmail": "email@company.com",
+  "projectName": "Test Project",
+  "date": "Fri, 09 Apr 2021",
+  "requiredBy": "Fri, 20 Apr 2021",
+  "name": "Clark Kent",
+  "contact": "Miles Morales",
+  "address": "123 Metcalf St",
+  "phone": "+1 (221) 845-2747",
+  "email": "bob@email.com",
+  "thumbnail": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/cf/57/e4/rideau-canal-skateway.jpg?w=1000&h=600&s=1",
+  "table": [
+    {
+      "value": "This is a product",
+      "quantity": 10,
+      "price": 200,
+      "total": 2000
+    },
+    {
+      "value": "This is another product",
+      "quantity": 20,
+      "price": 100,
+      "total": 2000
+    },
+    {
+      "value": "This is a third product",
+      "quantity": 30,
+      "price": 500,
+      "total": 1500
+    },
+    {
+      "value": "This is a repeated product",
+      "quantity": 2,
+      "price": 550,
+      "total": 1100
+    },
+    {
+      "value": "This is the last product",
+      "quantity": 30,
+      "price": 90,
+      "total": 1800
+    }
+  ]
+}

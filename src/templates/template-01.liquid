@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Threekit PDF - Template 1</title>
+    <style>
+      @media print {
+        * {
+          box-sizing: border-box;
+        }
+        body {
+          margin: 0;
+          padding: 20px 12px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          font-size: 12px;
+        }
+        .color-bar {
+          height: 20px;
+          background: #1890ff;
+        }
+        .content-container {
+          padding: 28px 20px;
+        }
+        #header {
+          display: grid;
+          grid-template-columns: max-content auto max-content;
+          grid-gap: 20px;
+          background: #f3f3f3;
+        }
+        #header > div {
+          height: max-content;
+          position: relative;
+          top: 50%;
+          transform: translateY(-50%);
+          display: inline-block;
+          font-size: 13px;
+        }
+        .images img {
+          width: 380px;
+          object-fit: contain;
+        }
+        #project {
+          display: grid;
+          grid-template-columns: auto 300px;
+          grid-gap: 20px;
+        }
+        .field {
+          display: grid;
+          grid-template-columns: 130px auto;
+          grid-gap: 10px;
+          margin-bottom: 10px;
+        }
+        .field > div:nth-child(1) {
+          color: #4a7f9e;
+        }
+        .field > div:nth-child(2) {
+          text-transform: uppercase;
+        }
+        #table {
+        }
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+          font-size: 12px;
+        }
+        td,
+        th {
+          border: 1px solid #dddddd;
+          text-align: left;
+          padding: 8px;
+        }
+        tr:nth-child(even) {
+          background: #f3f3f3;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="color-bar"></div>
+      <div id="header" class="content-container">
+        <div>
+          <img height="40px" src="{{ companyLogo }}" alt="company-logo" />
+        </div>
+        <div>
+          <div>Phone: {{ companyPhone }}</div>
+          <div>Email: {{ companyEmail }}</div>
+        </div>
+        <div>
+          <h1>ESTIMATE</h1>
+          <div>Date: {{ date }}</div>
+          <div>Required by: {{ requiredBy }}</div>
+        </div>
+      </div>
+      <div id="project" class="content-container">
+        <div class="images">
+          <img src="{{ thumbnail }}" alt="configuration-image" />
+        </div>
+        <div>
+          <h2>Project</h2>
+          <hr />
+          <div class="field">
+            <div>Project Name:</div>
+            <div>{{ projectName }}</div>
+          </div>
+          <div class="field">
+            <div>Customer Name:</div>
+            <div>{{ name }}</div>
+          </div>
+          <div class="field">
+            <div>Customer Address:</div>
+            <div>{{ address }}</div>
+          </div>
+          <div class="field">
+            <div>Contact:</div>
+            <div>{{ contact }}</div>
+          </div>
+          <div class="field">
+            <div>Phone:</div>
+            <div>{{ phone }}</div>
+          </div>
+          <div class="field">
+            <div>Email:</div>
+            <div>{{ email }}</div>
+          </div>
+        </div>
+      </div>
+      {% if table %}
+      <div id="table" class="content-container">
+        <table>
+          <tr>
+            <th>Description</th>
+            <th style="text-align: center">Quantity</th>
+            <th style="text-align: center">Price</th>
+            <th style="text-align: center">Total</th>
+          </tr>
+          {% for row in table %}
+          <tr>
+            <td>{{ row.value }}</td>
+            <td style="text-align: center">{{ row.quantity }}</td>
+            <td style="text-align: center">${{ row.price }}</td>
+            <td style="text-align: center">${{ row.total }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      {% endif %}
+    </div>
+    <div class="color-bar"></div>
+  </body>
+</html>
