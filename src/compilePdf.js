@@ -4,6 +4,7 @@ const { Liquid } = require('liquidjs');
 const { PDF_DIR } = require('./constants');
 
 const engine = new Liquid();
+let browser;
 
 const compilePdf = (filenameRaw, data) => {
   return new Promise(async (resolve, reject) => {
@@ -17,9 +18,12 @@ const compilePdf = (filenameRaw, data) => {
       const tpl = engine.parse(template);
       const htmlContent = await engine.render(tpl, data);
 
-      const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      });
+      if (!browser) {
+        browser = await puppeteer.launch({
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
+      }
+
       const page = await browser.newPage();
       await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
       await page.emulateMediaType('print');
@@ -30,7 +34,8 @@ const compilePdf = (filenameRaw, data) => {
       });
 
       const buffer = Buffer.from(byteArray, 'binary');
-      browser.close();
+      page.close();
+      // browser.close();
       resolve(buffer);
     } catch (e) {
       reject(e);
