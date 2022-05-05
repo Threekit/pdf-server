@@ -37,7 +37,7 @@ app.post('/pdf/:template', async (req, res) => {
     return res.status(422).send({ message: 'missing PDF template' });
 
   try {
-    const pdf = await compilePdf(filename, req.body);
+    const pdf = await compilePdf(req.params.template, req.body);
 
     res.set(
       Object.assign(
