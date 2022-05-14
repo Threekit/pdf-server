@@ -1,21 +1,14 @@
-const fs = require('fs');
 const puppeteer = require('puppeteer');
 const { Liquid } = require('liquidjs');
-const { PDF_DIR } = require('./constants');
 
 const engine = new Liquid();
 let browser;
 
-const compilePdf = (filenameRaw, data) => {
+const compilePdf = (file, data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const filename = filenameRaw.includes('.liquid')
-        ? filenameRaw
-        : `${filenameRaw}.liquid`;
-      const template = fs.readFileSync(`${PDF_DIR}/${filename}`, 'utf-8');
-      if (!template)
-        reject({ message: `'${filenameRaw}', template not found` });
-      const tpl = engine.parse(template);
+      const templateBuffer = Buffer.from(file.buffer);
+      const tpl = engine.parse(templateBuffer.toString());
       const htmlContent = await engine.render(tpl, data);
 
       if (!browser) {
@@ -35,7 +28,6 @@ const compilePdf = (filenameRaw, data) => {
 
       const buffer = Buffer.from(byteArray, 'binary');
       page.close();
-      // browser.close();
       resolve(buffer);
     } catch (e) {
       reject(e);

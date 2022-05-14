@@ -1,9 +1,10 @@
-const fs = require('fs');
 const express = require('express');
+const multer = require('multer');
 const cors = require('cors');
 const morgan = require('morgan');
 const compilePdf = require('./compilePdf');
-const { PORT, TEST_DATA_DIR } = require('./constants');
+
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
@@ -11,41 +12,30 @@ app.use(morgan('tiny'));
 app.use(express.json());
 app.use(cors());
 
-app.get('/pdf/:template', async (req, res) => {
-  if (!req.params.template)
+app.post('/pdf', multer().single('template'), async (req, res) => {
+  if (!req.file)
     return res.status(422).send({ message: 'missing PDF template' });
+  if (!req.body.data)
+    return res.status(422).send({ message: 'missing PDF data' });
 
-  try {
-    const testData = fs.readFileSync(
-      `${TEST_DATA_DIR}/${req.params.template.replace('.liquid', '')}.json`,
-      'utf-8'
-    );
+  const data = JSON.parse(req.body.data);
+  let filename = 'configuration.pdf';
 
-    const pdf = await compilePdf(req.params.template, JSON.parse(testData));
-
-    res.set({ 'Content-type': 'application/pdf' });
-    res.status(200).send(pdf);
-  } catch (e) {
-    console.log(e);
-    res.status(422).send(e);
+  if (req.body.filename) {
+    const preppedFilename = req.body.filename.trim().replaceAll(' ', '-');
+    if (preppedFilename.endsWith('.pdf')) filename = preppedFilename;
+    else filename = `${preppedFilename}.pdf`;
   }
-});
-
-app.post('/pdf/:template', async (req, res) => {
-  if (!req.body) return res.status(422).send();
-  if (!req.params.template)
-    return res.status(422).send({ message: 'missing PDF template' });
 
   try {
-    const pdf = await compilePdf(filename, req.body);
+    const pdf = await compilePdf(req.file, data);
 
     res.set(
       Object.assign(
         { 'Content-type': 'application/pdf' },
         req.query.download === 'true'
           ? {
-              'Content-Disposition':
-                'attachment;filename=threekit-configuration.pdf',
+              'Content-Disposition': `attachment;filename=${filename}`,
             }
           : {}
       )
